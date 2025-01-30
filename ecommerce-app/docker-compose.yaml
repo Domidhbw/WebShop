@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  product-db:
+    build: ./product-db
+    ports:
+      - "5000:80"
+    networks:
+      - ecommerce-net
+    volumes:
+      - ./product-db/Data:/app/Data
+
+  search-api:
+    build: ./search-api
+    ports:
+      - "5001:80"
+    networks:
+      - ecommerce-net
+    depends_on:
+      - product-db
+
+  shoppingcart-db:
+    build: ./shoppingcart-db
+    ports:
+      - "5002:80"
+    networks:
+      - ecommerce-net
+    volumes:
+      - ./shoppingcart-db/Data:/app/Data
+
+  shoppingcart-api:
+    build: ./shoppingcart-api
+    ports:
+      - "5003:80"
+    networks:
+      - ecommerce-net
+    depends_on:
+      - shoppingcart-db
+
+  website:
+    build: ./website
+    ports:
+      - "5004:80"
+    networks:
+      - ecommerce-net
+    depends_on:
+      - search-api
+      - shoppingcart-api
+
+networks:
+  ecommerce-net:
+    driver: bridge
