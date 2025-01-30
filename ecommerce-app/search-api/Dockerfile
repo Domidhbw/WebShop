@@ -1,10 +1,10 @@
 # Use the official ASP.NET Core runtime as a base image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 
 # Use the SDK image to build the project
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY Search.API/Search.API.csproj Search.API/
 RUN dotnet restore "Search.API/Search.API.csproj"
