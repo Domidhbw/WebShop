@@ -7,10 +7,12 @@ namespace Search.API.Services
 {
     public class ProductService
     {
-        private readonly string _filePath = Path.Combine("Data", "products.json");
+        private readonly string _filePath = Directory.GetCurrentDirectory() + "\\Data\\products.json";
 
         public List<Product> GetProducts()
         {
+            Console.WriteLine(Directory.GetCurrentDirectory());
+            Console.WriteLine(_filePath);
             if (!File.Exists(_filePath))
             {
                 return new List<Product>();

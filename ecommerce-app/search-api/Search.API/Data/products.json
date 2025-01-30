@@ -1,12 +1,1 @@
-[
-  {
-    "id": 1,
-    "name": "Product 1",
-    "price": 10.99
-  },
-  {
-    "id": 2,
-    "name": "Product 2",
-    "price": 20.99
-  }
-]
+[{"Id":10,"Name":"du stinks","Price":50},{"Id":1,"Name":"test","Price":0}]
