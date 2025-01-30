@@ -1,0 +1,33 @@
+﻿@model List<Website.Models.Product>
+
+<h1>Products</h1>
+
+<!-- Search Bar -->
+<form method="get" action="@Url.Action("Index")">
+    <input type="text" name="searchTerm" placeholder="Search products..." />
+    <button type="submit">Search</button>
+</form>
+
+<!-- Product Cards -->
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">$@product.Price</p>
+                    <button class="btn btn-primary" onclick="addToCart(@product.Id)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Add to Cart Script -->
+<script>
+    function addToCart(productId) {
+        alert(`Product ${productId} added to cart!`);
+        // You can implement actual cart functionality here (e.g., call an API).
+    }
+</script>
