@@ -7,7 +7,7 @@ namespace Search.API.Services
 {
     public class ProductService
     {
-        private readonly string _filePath = Directory.GetCurrentDirectory() + "\\Data\\products.json";
+        private readonly string _filePath = Path.Combine(AppContext.BaseDirectory, "Data", "products.json");
 
         public List<Product> GetProducts()
         {
@@ -19,6 +19,8 @@ namespace Search.API.Services
             }
 
             var json = File.ReadAllText(_filePath);
+            Console.WriteLine("json:");
+            Console.WriteLine(json);
             return JsonSerializer.Deserialize<List<Product>>(json) ?? new List<Product>();
         }
 

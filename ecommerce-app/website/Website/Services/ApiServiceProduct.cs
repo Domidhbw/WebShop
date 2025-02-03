@@ -15,6 +15,11 @@ namespace Website.Services
         {
             var response = await _httpClient.GetAsync("/products");
             response.EnsureSuccessStatusCode();
+
+            // Log the raw response
+            var rawResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("API Response: " + rawResponse);
+
             return await response.Content.ReadFromJsonAsync<List<Product>>();
         }
 

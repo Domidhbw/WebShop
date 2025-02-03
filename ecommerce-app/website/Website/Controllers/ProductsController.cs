@@ -14,7 +14,9 @@ namespace Website.Controllers
 
         public async Task<IActionResult> Index(string searchTerm)
         {
+            Console.WriteLine("VIEW");
             var products = await _apiServiceProduct.GetProductsAsync();
+            Console.WriteLine(products);
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 products = products
@@ -22,13 +24,6 @@ namespace Website.Controllers
                     .ToList();
             }
             return View(products);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId)
-        {
-            await _apiServiceProduct.AddToCartAsync(productId);
-            return RedirectToAction(nameof(Index));
         }
     }
 }
