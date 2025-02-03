@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
+using ShoppingCart.API.Services;
+using ShoppingCart.API.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -16,29 +18,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+// Endpoint to get a shopping cart by username
+app.MapGet("/shoppingcart/{username}", (string username, ShoppingCartService shoppingCartService) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var cart = shoppingCartService.GetShoppingCartByUser(username);
+    return cart is not null ? Results.Ok(cart) : Results.NotFound("User not found");
+});
 
-app.MapGet("/weatherforecast", () =>
+app.MapPost("/shoppingcart", ([FromBody] ShoppingCart cart, ShoppingCartService shoppingCartService) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    shoppingCartService.AddOrUpdateShoppingCart(cart);
+    return Results.Ok("Shopping cart updated successfully");
+});
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+
