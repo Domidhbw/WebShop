@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<ApiServiceProduct>(client =>
     {
-        client.BaseAddress = new Uri("http://127.0.0.1:5001");
+        client.BaseAddress = new Uri("http://search-api:8080");
     });
 
 var app = builder.Build();
