@@ -5,17 +5,30 @@ namespace Website.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ProductService _productService;
+        private readonly ApiServiceProduct _apiServiceProduct;
 
-        public ProductsController(ProductService productService)
+        public ProductsController(ApiServiceProduct apiServiceProduct)
         {
-            _productService = productService;
+            _apiServiceProduct = apiServiceProduct;
         }
 
-        public IActionResult Index(string searchTerm)
+        public async Task<IActionResult> Index(string searchTerm)
         {
-            var products = _productService.GetProducts(searchTerm);
+            var products = await _apiServiceProduct.GetProductsAsync();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                products = products
+                    .Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
             return View(products);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int productId)
+        {
+            await _apiServiceProduct.AddToCartAsync(productId);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

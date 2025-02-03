@@ -3,7 +3,10 @@ using Website.Services;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<ProductService>();
+builder.Services.AddHttpClient<ApiServiceProduct>(client =>
+    {
+        client.BaseAddress = new Uri("http://127.0.0.1:5001");
+    });
 
 var app = builder.Build();
 app.UseHttpsRedirection();
