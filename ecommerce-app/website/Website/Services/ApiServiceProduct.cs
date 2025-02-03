@@ -28,6 +28,8 @@ namespace Website.Services
             var response = await _httpClient.PostAsJsonAsync("/api/cart", new { ProductId = productId });
             response.EnsureSuccessStatusCode();
         }
+
+
     }
 }
 

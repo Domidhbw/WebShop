@@ -1,24 +1,64 @@
 ﻿@model List<Website.Models.Product>
 
-<h1>Products</h1>
+@{
+    // Safely get the cart from ViewBag
+    var cart = ViewBag.Cart as Website.Models.ShoppingCart ?? new Website.Models.ShoppingCart { UserName = "default" };
 
-<!-- Search Bar -->
-<form method="get" action="@Url.Action("Index")">
-    <input type="text" name="searchTerm" placeholder="Search products..." />
-    <button type="submit">Search</button>
-</form>
+    // Group products in the cart
+    var groupedProducts = cart.Products
+        .GroupBy(p => p.Id)
+        .Select(g => new
+        {
+            Product = g.First(),
+            Quantity = g.Count()
+        }) ?? Enumerable.Empty<object>();
+}
 
-<!-- Product Cards -->
+<div class="cart-status mb-4 p-3 border rounded">
+    <h4>Shopping Cart</h4>
+    <div id="cart-items">
+        @if (groupedProducts)
+        {
+            <ul class="list-unstyled">
+                @foreach (var item in groupedProducts)
+                {
+                    <li>
+                        @item.Product.Name x @item.Quantity
+                        - $@(item.Product.Price * item.Quantity)
+                    </li>
+                }
+            </ul>
+            <p>Total: $@groupedProducts.Sum(i => i.Product.Price * i.Quantity)</p>
+        }
+        else
+        {
+            <p>Your cart is empty</p>
+        }
+    </div>
+</div>
+
+<!-- Product Listing -->
 <div class="row">
-    @foreach (var product in Model)
+    @if (Model != null && Model.Any())
     {
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text">$@product.Price</p>
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">$@product.Price</p>
+                        <form method="post" action="@Url.Action("AddToCart")">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+    }
+    else
+    {
+        <p>No products found.</p>
     }
 </div>

@@ -5,17 +5,17 @@ namespace Website.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ApiServiceProduct _apiServiceProduct;
+        private readonly ApiServiceProduct _apiService;
 
         public ProductsController(ApiServiceProduct apiServiceProduct)
         {
-            _apiServiceProduct = apiServiceProduct;
+            _apiService = apiServiceProduct;
         }
 
         public async Task<IActionResult> Index(string searchTerm)
         {
             Console.WriteLine("VIEW");
-            var products = await _apiServiceProduct.GetProductsAsync();
+            var products = await _apiService.GetProductsAsync();
             Console.WriteLine(products);
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -25,5 +25,6 @@ namespace Website.Controllers
             }
             return View(products);
         }
+
     }
 }

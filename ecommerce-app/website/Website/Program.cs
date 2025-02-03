@@ -7,7 +7,10 @@ builder.Services.AddHttpClient<ApiServiceProduct>(client =>
     {
         client.BaseAddress = new Uri("http://search-api:8080");
     });
-
+builder.Services.AddHttpClient<ShoppingCartApi>(client =>
+{
+    client.BaseAddress = new Uri("http://shoppingcart-db:8080");
+});
 var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseStaticFiles();

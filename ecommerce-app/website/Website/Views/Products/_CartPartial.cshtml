@@ -1,0 +1,40 @@
+﻿@* Views/Products/_CartPartial.cshtml *@
+@model Website.Models.ShoppingCart
+
+@{
+    var groupedProducts = Model.Products
+        .GroupBy(p => p.Id)
+        .Select(g => new
+        {
+            Product = g.First(),
+            Quantity = g.Count()
+        });
+}
+
+@if (Model.Products.Any())
+{
+    <ul class="list-unstyled">
+        @foreach (var item in groupedProducts)
+        {
+            <li>
+                @item.Product.Name x @item.Quantity
+                - $@(item.Product.Price * item.Quantity)
+            </li>
+        }
+    </ul>
+    <p class="fw-bold">Total: $@groupedProducts.Sum(i => i.Product.Price * i.Quantity)</p>
+
+    @if (!string.IsNullOrEmpty(Model.LastShippedToAddress))
+    {
+        <p class="text-muted">Last shipped to: @Model.LastShippedToAddress</p>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.LastPaymentMethod))
+    {
+        <p class="text-muted">Last payment method: @Model.LastPaymentMethod</p>
+    }
+}
+else
+{
+    <p>Your cart is empty</p>
+}

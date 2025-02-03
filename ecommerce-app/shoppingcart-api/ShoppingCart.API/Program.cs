@@ -18,18 +18,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Endpoint to get a shopping cart by username
-app.MapGet("/shoppingcart/{username}", (string username, ShoppingCartService shoppingCartService) =>
-{
-    var cart = shoppingCartService.GetShoppingCartByUser(username);
-    return cart is not null ? Results.Ok(cart) : Results.NotFound("User not found");
-});
-
-app.MapPost("/shoppingcart", ([FromBody] ShoppingCart cart, ShoppingCartService shoppingCartService) =>
-{
-    shoppingCartService.AddOrUpdateShoppingCart(cart);
-    return Results.Ok("Shopping cart updated successfully");
-});
 
 app.Run();
 
